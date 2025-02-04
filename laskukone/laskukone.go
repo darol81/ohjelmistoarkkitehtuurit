@@ -1,21 +1,22 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"math/rand"
+	"os"
 	"strconv"
 )
 
-func readNumber(msg string) (float64, error) {
+func readNumber(msg string) float64 {
 	var number float64
 	fmt.Print(msg)
 	_, err := fmt.Scanln(&number)
 
 	if err != nil {
-		return 0, errors.New("Virheellinen syöte")
+		println("Virheellinen syöte.")
+		os.Exit(0)
 	}
-	return number, nil
+	return number
 }
 
 func readOperation(msg string) string {
@@ -30,19 +31,10 @@ func main() {
 	var luku1, luku2 float64
 	// Laskutoimitus
 	var operaatio string
-	var err error
 
 	// Kysy ensimmäinen luku.
-	luku1, err = readNumber("Anna ensimmäinen luku: ")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	luku2, err = readNumber("Anna toinen luku: ")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	luku1 = readNumber("Anna ensimmäinen luku: ")
+	luku2 = readNumber("Anna toinen luku: ")
 
 	// Kysy laskutoimitus.
 	operaatio = readOperation("Anna laskutoimitus: ")
@@ -57,26 +49,20 @@ func main() {
 	var virhe string
 
 	// Suoritetaan laskutoimituksen mukainen laskutoimitus.
+	virhe = ""
 	switch operaatio {
 	case "+":
 		tulos = luku1 + luku2
-		virhe = ""
 	case "-":
 		tulos = luku1 - luku2
-		virhe = ""
-
 	case "*":
 		tulos = luku1 * luku2
-		virhe = ""
-
 	case "/":
 		if luku2 == 0 {
 			virhe = "Nollalla ei voi jakaa."
 			break
 		}
 		tulos = luku1 / luku2
-		virhe = ""
-
 	default:
 		tulos = luku1 + rand.Float64()*luku2
 		virhe = "En tunnistanut laskutoimitusta '" + operaatio + "'. " +
