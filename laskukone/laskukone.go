@@ -1,16 +1,21 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"strconv"
 )
 
-func readNumber(msg string) float64 {
+func readNumber(msg string) (float64, error) {
 	var number float64
 	fmt.Print(msg)
-	fmt.Scan(&number)
-	return number
+	_, err := fmt.Scanln(&number)
+
+	if err != nil {
+		return 0, errors.New("Virheellinen syöte")
+	}
+	return number, nil
 }
 
 func readOperation(msg string) string {
@@ -25,10 +30,19 @@ func main() {
 	var luku1, luku2 float64
 	// Laskutoimitus
 	var operaatio string
+	var err error
 
 	// Kysy ensimmäinen luku.
-	luku1 = readNumber("Anna ensimmäinen luku: ")
-	luku2 = readNumber("Anna toinen luku: ")
+	luku1, err = readNumber("Anna ensimmäinen luku: ")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	luku2, err = readNumber("Anna toinen luku: ")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	// Kysy laskutoimitus.
 	operaatio = readOperation("Anna laskutoimitus: ")
@@ -56,6 +70,10 @@ func main() {
 		virhe = ""
 
 	case "/":
+		if luku2 == 0 {
+			virhe = "Nollalla ei voi jakaa."
+			break
+		}
 		tulos = luku1 / luku2
 		virhe = ""
 
