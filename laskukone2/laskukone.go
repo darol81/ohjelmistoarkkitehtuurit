@@ -40,12 +40,16 @@ func readOperation(msg string) string {
 	return operation
 }
 
+func calculate(luku1, luku2 float64, op string) {
+	expression := fmt.Sprintf("%f %s %f", luku1, op, luku2)
+	result, _ := evaluate(expression)
+	fmt.Println("Lasken: ", luku1, op, luku2)
+	fmt.Println("Tulos on", result)
+}
+
 func main() {
 	luku1 := readNumber("Anna ensimmäinen luku: ")
 	luku2 := readNumber("Anna toinen luku: ")
 	operaatio := readOperation("Anna laskutoimitus: ")
-	expression := fmt.Sprintf("%f %s %f", luku1, operaatio, luku2)
-	result, _ := evaluate(expression)
-	fmt.Println("Lasken: ", luku1, operaatio, luku2)
-	fmt.Println("Tulos on", result)
+	calculate(luku1, luku2, operaatio)
 }
