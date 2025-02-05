@@ -18,7 +18,6 @@ func evaluate(expression string) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return output, nil
 }
 
