@@ -2,10 +2,25 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"os"
-	"strconv"
+
+	"github.com/expr-lang/expr"
 )
+
+func evaluate(expression string) (interface{}, error) {
+	env := map[string]interface{}{}
+
+	program, err := expr.Compile(expression, expr.Env(env))
+	if err != nil {
+		return nil, err
+	}
+	output, err := expr.Run(program, env)
+	if err != nil {
+		return nil, err
+	}
+
+	return output, nil
+}
 
 func readNumber(msg string) float64 {
 	var number float64
@@ -27,53 +42,11 @@ func readOperation(msg string) string {
 }
 
 func main() {
-	// Laskettavat luvut
-	var luku1, luku2 float64
-	// Laskutoimitus
-	var operaatio string
-
-	// Kysy ensimmäinen luku.
-	luku1 = readNumber("Anna ensimmäinen luku: ")
-	luku2 = readNumber("Anna toinen luku: ")
-
-	// Kysy laskutoimitus.
-	operaatio = readOperation("Anna laskutoimitus: ")
-
-	// Tulostetaan, mitä luettiin.
+	luku1 := readNumber("Anna ensimmäinen luku: ")
+	luku2 := readNumber("Anna toinen luku: ")
+	operaatio := readOperation("Anna laskutoimitus: ")
+	expression := fmt.Sprintf("%f %s %f", luku1, operaatio, luku2)
+	result, _ := evaluate(expression)
 	fmt.Println("Lasken: ", luku1, operaatio, luku2)
-
-	// Tulos sisältää laskutoimituksen tuloksen.
-	var tulos float64
-
-	// Virhe sisältää kuvauksen virheestä, mutta on tyhjä, jos virhettä ei tapahtunut.
-	var virhe string
-
-	// Suoritetaan laskutoimituksen mukainen laskutoimitus.
-	virhe = ""
-	switch operaatio {
-	case "+":
-		tulos = luku1 + luku2
-	case "-":
-		tulos = luku1 - luku2
-	case "*":
-		tulos = luku1 * luku2
-	case "/":
-		if luku2 == 0 {
-			virhe = "Nollalla ei voi jakaa."
-			break
-		}
-		tulos = luku1 / luku2
-	default:
-		tulos = luku1 + rand.Float64()*luku2
-		virhe = "En tunnistanut laskutoimitusta '" + operaatio + "'. " +
-			"Tässä sinulle satunnaisluku: " +
-			strconv.FormatFloat(tulos, 'G', 3, 64)
-	}
-
-	// Tulostetaan laskutoimituksen tulos tai virhe.
-	if virhe == "" {
-		fmt.Println("Tulos on", tulos)
-	} else {
-		fmt.Println("Virhe:", virhe)
-	}
+	fmt.Println("Tulos on", result)
 }
