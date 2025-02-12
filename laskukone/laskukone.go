@@ -32,7 +32,7 @@ func laske(luku1, luku2 float64, operaatio string) {
 	// Lasketaan laskutoimitus.
 
 	fmt.Println("Lasken: ", luku1, operaatio, luku2)
-	virhe = ""
+
 	switch operaatio {
 	case "+":
 		tulos = luku1 + luku2
