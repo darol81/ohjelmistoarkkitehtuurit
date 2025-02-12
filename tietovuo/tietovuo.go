@@ -50,6 +50,7 @@ func readInput[T int | float64 | string](msg string) T {
 }
 
 func sendValue[T int | float64 | string](value T, channel chan T) {
+	defer close(channel)
 	channel <- value
 }
 
@@ -66,8 +67,5 @@ func main() {
 	go sendValue(value2, chan2)
 	go sendValue(value3, chan_op)
 
-	luku1 := <-chan1
-	luku2 := <-chan2
-	operaatio := <-chan_op
-	calculate(luku1, luku2, operaatio)
+	calculate(<-chan1, <-chan2, <-chan_op)
 }
