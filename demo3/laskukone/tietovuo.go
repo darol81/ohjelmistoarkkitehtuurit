@@ -1,3 +1,5 @@
+/* Laskukone tietovuolla? Ehkä ei. GOroutineilla ja channelilla toteutettu laskukone */
+
 package main
 
 import (
